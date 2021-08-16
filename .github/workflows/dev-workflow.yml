@@ -28,8 +28,8 @@ jobs:
     - name: Maven verify
       run: mvn -B clean verify
 
-  sonar:
-    name: Test - SonarCloud Scan
+  codecov:
+    name: Test - Codecov Scan
     runs-on: ubuntu-latest
 
     steps:
@@ -41,7 +41,13 @@ jobs:
           distribution: 'adopt'
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
-      - name: SonarCloud Scan
-        run: mvn -B clean verify
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Test with Maven
+        run: mvn -B clean verify --file pom.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./target/site/jacoco/jacoco.xml
+          flags: unittests
