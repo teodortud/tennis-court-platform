@@ -17,7 +17,7 @@ jobs:
     - name: Set up JDK 11
       uses: actions/setup-java@v2
       with:
-        java-version: '11'
+        java-version: 11
         distribution: 'adopt'
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
@@ -28,19 +28,7 @@ jobs:
     - name: Maven verify
       run: mvn -B clean verify
 
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-      - run: mvn -B install --no-transfer-progress --file pom.xml
-
   coverage:
-    needs: build
     name: Test - Codecov Scan
     runs-on: ubuntu-latest
 
@@ -49,13 +37,13 @@ jobs:
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: 11
           distribution: 'adopt'
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: Test with Maven
-        run: mvn -B clean verify -P coverage --no-transfer-progress
+        run: mvn -B clean verify -P coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
@@ -63,3 +51,19 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./**/target/site/jacoco/jacoco.xml
           name: codecov
+
+  artifact:
+    name: Publish - GitHub Packages
+    runs-on: ubuntu-18.04
+    needs: [ test, coverage ]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Publish artifact on GitHub Packages
+        run: mvn -B clean deploy -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
