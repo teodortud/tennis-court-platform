@@ -28,7 +28,7 @@ jobs:
     - name: Maven verify
       run: mvn -B clean verify
 
-  codecov:
+  coverage:
     name: Test - Codecov Scan
     runs-on: ubuntu-latest
 
@@ -43,11 +43,11 @@ jobs:
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: Test with Maven
-        run: mvn -B clean verify --file pom.xml
+        run: mvn -B clean verify -P coverage --no-transfer-progress
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./target/site/jacoco/jacoco.xml
-          flags: unittests
+          file: ./**/target/site/jacoco/jacoco.xml
+          name: codecov
