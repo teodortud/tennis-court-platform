@@ -22,13 +22,13 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    - name: Maven package
+    - name: Maven Package
       run: mvn -B clean package -DskipTests
 
-    - name: Maven verify
+    - name: Maven Verify
       run: mvn -B clean verify
 
-  coverage:
+  sonar_coverage:
     name: Run Test Suites
     runs-on: ubuntu-latest
 
@@ -42,11 +42,7 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Run test
-        run: mvn -B clean verify
-
-      - name: Upload test coverage to Codecov
-        uses: codecov/codecov-action@v2.0.2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage/script/coverage-report.json
+      - name: SonarCloud Scan
+        run: mvn -B clean verify -Psonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

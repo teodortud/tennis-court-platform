@@ -17,6 +17,11 @@
 	<description>Tennis court booking platform</description>
 	<properties>
 		<java.version>11</java.version>
+		<sonar.sources>.</sonar.sources>
+		<sonar.inclusions>src/main/java/**,src/main/resources/**</sonar.inclusions>
+		<sonar.projectKey>teodortud_tennis-court-platform</sonar.projectKey>
+		<sonar.organization>teodortud</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencies>
@@ -88,23 +93,14 @@
 				</plugin>
 
 				<plugin>
-					<groupId>org.jacoco</groupId>
-					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.8.7</version>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.7.0.1746</version>
 					<executions>
-						<!-- Prepares the property pointing to the JaCoCo runtime agent
-                        which is passed as VM argument when Maven the Surefire plugin is executed. -->
 						<execution>
+							<phase>verify</phase>
 							<goals>
-								<goal>prepare-agent</goal>
-							</goals>
-						</execution>
-						<!-- Ensures that the code coverage report is created after
-                        all tests have been run. -->
-						<execution>
-							<id>generate-report</id>
-							<goals>
-								<goal>report</goal>
+								<goal>sonar</goal>
 							</goals>
 						</execution>
 					</executions>
@@ -112,16 +108,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-	<distributionManagement>
-		<repository>
-			<id>oss.sonatype.org</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-		<snapshotRepository>
-			<id>github</id>
-			<name>GitHub Packages</name>
-			<url>https://maven.pkg.github.com/codecentric/cxf-spring-boot-starter</url>
-		</snapshotRepository>
-	</distributionManagement>
 </project>
