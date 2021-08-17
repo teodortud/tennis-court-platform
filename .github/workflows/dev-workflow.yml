@@ -42,10 +42,10 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Test with Maven
+      - name: Run test
         run: mvn -B clean verify
 
-      - name: Upload coverage to Codecov
+      - name: Upload test coverage to Codecov
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-        run: bash <(curl -s https://codecov.io/bash)
+          files: ./coverage/script/coverage-final.json
