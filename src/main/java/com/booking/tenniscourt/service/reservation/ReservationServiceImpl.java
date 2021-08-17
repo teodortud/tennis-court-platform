@@ -38,10 +38,10 @@ public class ReservationServiceImpl implements ReservationService{
                 .refundValue(BigDecimal.valueOf(0))
                 .build();
 
-        var guest = guestRepository.findById(guestId).get();
+        var guest = guestRepository.findById(guestId);
 
         var reservation = reservationMapper.map(reservationDto);
-        reservation.setGuest(guest);
+        reservation.setGuest(guest.orElse(null));
 
         var schedule = scheduleMapper.map(scheduleDto);
         schedule.addReservation(reservation);
