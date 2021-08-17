@@ -17,6 +17,11 @@
 	<description>Tennis court booking platform</description>
 	<properties>
 		<java.version>11</java.version>
+		<sonar.sources>.</sonar.sources>
+		<sonar.inclusions>src/main/java/**,src/main/resources/**</sonar.inclusions>
+		<sonar.projectKey>teodortud_tennis-court-platform</sonar.projectKey>
+		<sonar.organization>teodortud</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencies>
@@ -86,8 +91,21 @@
 						</annotationProcessorPaths>
 					</configuration>
 				</plugin>
+
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.7.0.1746</version>
+					<executions>
+						<execution>
+							<phase>verify</phase>
+							<goals>
+								<goal>sonar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
-
 </project>

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class EchoController {
     @GetMapping("/echo")
-    public String echoTest(@RequestParam @DefaultValue("This is a test!") String echoTest){
-        return echoTest;
+    public String echoTest(@RequestParam @DefaultValue("test") String echoTest){
+        return String.format("This is a %s", echoTest);
     }
 }
